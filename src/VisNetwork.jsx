@@ -17,25 +17,25 @@ const jsonData = {
   child: [
     {
       group: "blue_group",
-      label: "upMain",
+      label: "home",
       color: "yellow",
       level: 1,
       child: [
         {
           group: "blue_group",
-          label: "upper-child-center",
+          label: "home",
           color: "yellow",
           level: 2,
         },
         {
           group: "blue_group",
-          label: "upper-child-left",
+          label: "home",
           color: "yellow",
           level: 2,
         },
         {
           group: "blue_group",
-          label: "upper-child-right",
+          label: "home",
           color: "yellow",
           level: 2,
         },
@@ -311,8 +311,9 @@ const evenChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
   };
   //center hidden node
   if (requireHiddenNodes) {
+    let hiddenNodeId = generateId();
     nodeData.push({
-      id: "hiddenNode_" + parent.angle,
+      id: "hiddenNode_" + hiddenNodeId,
       value: 2,
       label: "",
       x: children[0].level * 200 * Math.sin((Math.PI * 2 * parent.angle) / 360),
@@ -330,20 +331,22 @@ const evenChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
     });
     edgeData.push({
       from: parent.id,
-      to: "hiddenNode_" + parent.angle,
+      to: "hiddenNode_" + hiddenNodeId,
     });
-    hiddenNodeIds.center = "hiddenNode_" + parent.angle;
+    hiddenNodeIds.center = "hiddenNode_" + hiddenNodeId;
   }
   let newParent;
   children.map((item) => {
+    let id = generateId();
     let extra;
     let x;
     let y;
     //left side
     if (left > 0) {
+      let hiddenNodeId = generateId();
       if (requireHiddenNodes) {
         nodeData.push({
-          id: "hiddenNode_" + parent.angle + item.label,
+          id: "hiddenNode_" + hiddenNodeId,
           value: 2,
           label: "",
           x:
@@ -370,20 +373,20 @@ const evenChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
             };
           },
         });
-        hiddenNodeIds.left.push("hiddenNode_" + parent.angle + item.label);
+        hiddenNodeIds.left.push("hiddenNode_" + hiddenNodeId);
         extra = 0.5;
       }
       let r = (item.level + extra) * 200;
       x = r * Math.sin((Math.PI * 2 * (parent.angle - left * 10)) / 360);
       y = r * -Math.cos((Math.PI * 2 * (parent.angle - left * 10)) / 360);
       newParent = {
-        id: item.label,
+        id: id,
         x: x,
         y: y,
         angle: parent.angle - left * 10,
       };
       nodeData.push({
-        id: item.label,
+        id: id,
         value: 2,
         label: item.label,
         x: x,
@@ -393,8 +396,8 @@ const evenChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
         },
       });
       edgeData.push({
-        from: "hiddenNode_" + parent.angle + item.label,
-        to: item.label,
+        from: "hiddenNode_" + hiddenNodeId,
+        to: id,
       });
       if (!groupNodes[item.group]){
         groupNodes[item.group] = {
@@ -423,9 +426,10 @@ const evenChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
       }
       left--;
     } else if (right > 0) {
+      let hiddenNodeId = generateId();
       if (requireHiddenNodes) {
         nodeData.push({
-          id: "hiddenNode_" + parent.angle + item.label,
+          id: "hiddenNode_" + hiddenNodeId,
           value: 2,
           label: "",
           x:
@@ -452,20 +456,20 @@ const evenChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
             };
           },
         });
-        hiddenNodeIds.right.push("hiddenNode_" + parent.angle + item.label);
+        hiddenNodeIds.right.push("hiddenNode_" + hiddenNodeId);
         extra = 0.5;
       }
       let r = (item.level + extra) * 200;
       x = r * Math.sin((Math.PI * 2 * (parent.angle + right * 10)) / 360);
       y = r * -Math.cos((Math.PI * 2 * (parent.angle + right * 10)) / 360);
       newParent = {
-        id: item.label,
+        id: id,
         x: x,
         y: y,
         angle: parent.angle + right * 10,
       };
       nodeData.push({
-        id: item.label,
+        id: id,
         value: 2,
         label: item.label,
         x: x,
@@ -475,8 +479,8 @@ const evenChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
         },
       });
       edgeData.push({
-        from: "hiddenNode_" + parent.angle + item.label,
-        to: item.label,
+        from: "hiddenNode_" + hiddenNodeId,
+        to: id,
       });
       if (!groupNodes[item.group]){
         groupNodes[item.group] = {
@@ -560,8 +564,9 @@ const oddChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
   };
   //center hidden node
   if (requireHiddenNodes) {
+    let hiddenNodeId = generateId();
     nodeData.push({
-      id: "hiddenNode_" + parent.angle,
+      id: "hiddenNode_" + hiddenNodeId,
       value: 2,
       label: "",
       x: children[0].level * 200 * Math.sin((Math.PI * 2 * parent.angle) / 360),
@@ -577,10 +582,11 @@ const oddChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
         };
       },
     });
-    hiddenNodeIds.center = "hiddenNode_" + parent.angle;
+    hiddenNodeIds.center = "hiddenNode_" + hiddenNodeId;
   }
   let newParent;
   children.map((item, index) => {
+    let id = generateId();
     let extra;
     let x;
     let y;
@@ -595,13 +601,13 @@ const oddChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
       x = r * Math.sin((Math.PI * 2 * parent.angle) / 360);
       y = r * -Math.cos((Math.PI * 2 * parent.angle) / 360);
       newParent = {
-        id: item.label,
+        id: id,
         x: x,
         y: y,
         angle: parent.angle,
       };
       nodeData.push({
-        id: item.label,
+        id: id,
         value: 2,
         label: item.label,
         x: x,
@@ -612,7 +618,7 @@ const oddChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
       });
       edgeData.push({
         from: parent.id,
-        to: item.label,
+        to: id,
       });
       if (!groupNodes[item.group]){
         groupNodes[item.group] = {
@@ -642,19 +648,20 @@ const oddChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
     } else {
       // left side
       if (left > 0) {
+        let hiddenNodeId = generateId();
         if (requireHiddenNodes) {
           nodeData.push({
-            id: "hiddenNode_" + parent.angle + item.label,
+            id: "hiddenNode_" + hiddenNodeId,
             value: 2,
             label: "",
             x:
               item.level *
               200 *
-              Math.sin((Math.PI * 2 * ((parent.angle - left) * 10)) / 360),
+              Math.sin((Math.PI * 2 * (parent.angle - left * 10)) / 360),
             y:
               item.level *
               200 *
-              -Math.cos((Math.PI * 2 * ((parent.angle - left) * 10)) / 360),
+              -Math.cos((Math.PI * 2 * (parent.angle - left * 10)) / 360),
             shape: "custom",
             ctxRenderer: function ({
               ctx,
@@ -671,20 +678,20 @@ const oddChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
               };
             },
           });
-          hiddenNodeIds.left.push("hiddenNode_" + parent.angle + item.label);
+          hiddenNodeIds.left.push("hiddenNode_" + hiddenNodeId);
           extra = 0.5;
         }
         let r = (item.level + extra) * 200;
-        x = r * Math.sin((Math.PI * 2 * ((parent.angle - left) * 10)) / 360);
-        y = r * -Math.cos((Math.PI * 2 * ((parent.angle - left) * 10)) / 360);
+        x = r * Math.sin((Math.PI * 2 * (parent.angle - left * 10)) / 360);
+        y = r * -Math.cos((Math.PI * 2 * (parent.angle - left * 10)) / 360);
         newParent = {
-          id: item.label,
+          id: id,
           x: x,
           y: y,
-          angle: (parent.angle - left) * 10,
+          angle: (parent.angle - left* 10),
         };
         nodeData.push({
-          id: item.label,
+          id: id,
           value: 2,
           label: item.label,
           x: x,
@@ -694,8 +701,8 @@ const oddChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
           },
         });
         edgeData.push({
-          from: "hiddenNode_" + parent.angle + item.label,
-          to: item.label,
+          from: "hiddenNode_" + hiddenNodeId,
+          to: id,
         });
         if (!groupNodes[item.group]){
           groupNodes[item.group] = {
@@ -724,19 +731,20 @@ const oddChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
         }
         left--;
       } else if (right > 0) {
+        let hiddenNodeId = generateId();
         if (requireHiddenNodes) {
           nodeData.push({
-            id: "hiddenNode_" + parent.angle + item.label,
+            id: "hiddenNode_" + hiddenNodeId,
             value: 2,
             label: "",
             x:
               item.level *
               200 *
-              Math.sin((Math.PI * 2 * ((parent.angle + right) * 10)) / 360),
+              Math.sin((Math.PI * 2 * (parent.angle + right * 10)) / 360),
             y:
               item.level *
               200 *
-              -Math.cos((Math.PI * 2 * ((parent.angle + right) * 10)) / 360),
+              -Math.cos((Math.PI * 2 * (parent.angle + right * 10)) / 360),
             shape: "custom",
             ctxRenderer: function ({
               ctx,
@@ -753,20 +761,20 @@ const oddChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
               };
             },
           });
-          hiddenNodeIds.right.push("hiddenNode_" + parent.angle + item.label);
+          hiddenNodeIds.right.push("hiddenNode_" + hiddenNodeId);
           extra = 0.5;
         }
         let r = (item.level + extra) * 200;
-        x = r * Math.sin((Math.PI * 2 * ((parent.angle + right) * 10)) / 360);
-        y = r * -Math.cos((Math.PI * 2 * ((parent.angle + right) * 10)) / 360);
+        x = r * Math.sin((Math.PI * 2 * (parent.angle + right * 10)) / 360);
+        y = r * -Math.cos((Math.PI * 2 * (parent.angle + right * 10)) / 360);
         newParent = {
-          id: item.label,
+          id: id,
           x: x,
           y: y,
-          angle: (parent.angle + right) * 10,
+          angle: (parent.angle + right* 10),
         };
         nodeData.push({
-          id: item.label,
+          id: id,
           value: 2,
           label: item.label,
           x: x,
@@ -776,8 +784,8 @@ const oddChildren = (nodesPerSide, children, parent, nodeData, edgeData) => {
           },
         });
         edgeData.push({
-          from: "hiddenNode_" + parent.angle + item.label,
-          to: item.label,
+          from: "hiddenNode_" + hiddenNodeId,
+          to: id,
         });
         if (!groupNodes[item.group]){
           groupNodes[item.group] = {
@@ -860,19 +868,20 @@ const checkChild = (children, nodeData, parent, edgeData) => {
   let circleDivide = 360 / children.length;
   let newParent;
   children.map((item) => {
+    let id = generateId();
     let r = item.level * 300;
     if (item.level === 1) {
       let x = r * Math.sin((Math.PI * 2 * startDegree) / 360);
       let y = r * -Math.cos((Math.PI * 2 * startDegree) / 360);
       startDegree += circleDivide;
       newParent = {
-        id: item.label,
+        id: id,
         x: x,
         y: y,
         angle: startDegree - circleDivide,
       };
       nodeData.push({
-        id: item.label,
+        id: id,
         value: 4,
         label: item.label,
         x: x,
@@ -883,7 +892,7 @@ const checkChild = (children, nodeData, parent, edgeData) => {
       });
       edgeData.push({
         from: parent.id,
-        to: item.label,
+        to: id,
       });
       if (!groupNodes[item.group]){
         groupNodes[item.group] = {
@@ -923,12 +932,17 @@ const checkChild = (children, nodeData, parent, edgeData) => {
   });
 };
 
+const generateId = () => {
+  return Math.floor(Math.random() * 10000);
+}
+
 const getGraphData = (jsonData) => {
   let nodeData = [];
   let edgeData = [];
   //main node
+  let id = generateId();
   nodeData.push({
-    id: jsonData.label,
+    id: id,
     value: 5,
     label: jsonData.label,
     x: 0,
@@ -942,11 +956,11 @@ const getGraphData = (jsonData) => {
     checkChild(
       jsonData.child,
       nodeData,
-      { id: jsonData.label, x: 0, y: 0, angle: 0 },
+      { id: id, x: 0, y: 0, angle: 0 },
       edgeData
     );
   }
-  console.log(groupNodes, "groupNodes");
+
   return {
     node: new DataSet(nodeData),
     edge: new DataSet(edgeData),
@@ -1101,7 +1115,6 @@ const VisNetwork = () => {
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.arc(0, 0, 900, archStart, archEnd);
-        console.log(-Math.PI * 0.7, -Math.PI * 0.3)
         ctx.closePath();
         ctx.fill();
       }
